@@ -3,6 +3,13 @@ import os
 
 class Config:
     def __init__(self):
+        self.update_interval = None
+        self.subscriptions_file = None
+        self.notification_settings = None
+        self.openAI_token=os.getenv("OPENAI_TOKEN")
+        self.github_token = os.getenv("GITHUB_TOKEN")
+        self.openAI_URL=os.getenv("OPENAI_URL")
+
         self.load_config()
     
     def load_config(self):
@@ -12,6 +19,8 @@ class Config:
             
             # 使用环境变量或配置文件的 GitHub Token
             self.github_token = os.getenv('GITHUB_TOKEN', config.get('github_token'))
+
+            self.notification_settings = config.get('notification_settings')
 
             # 初始化电子邮件设置
             self.email = config.get('email', {})
