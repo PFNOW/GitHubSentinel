@@ -3,13 +3,13 @@ from openai import OpenAI  # 导入OpenAI库用于访问GPT模型
 from logger import LOG  # 导入日志模块
 
 class LLM:
-    def __init__(self):
+    def __init__(self,openAI_token,openAI_URL):
         # 创建一个OpenAI客户端实例
-        self.client = OpenAI()
+        self.client = OpenAI(base_url =openAI_URL, api_key = openAI_token)
         # 配置日志文件，当文件大小达到1MB时自动轮转，日志级别为DEBUG
         LOG.add("daily_progress/llm_logs.log", rotation="1 MB", level="DEBUG")
 
-    def generate_daily_report(self, markdown_content, dry_run=False):
+    def generate_daily_report(self, markdown_content, dry_run=True):
         # 构建一个用于生成报告的提示文本，要求生成的报告包含新增功能、主要改进和问题修复
         prompt = f"以下是项目的最新进展，根据功能合并同类项，形成一份简报，至少包含：1）新增功能；2）主要改进；3）修复问题；:\n\n{markdown_content}"
         

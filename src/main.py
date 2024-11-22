@@ -22,7 +22,7 @@ def main():
     config = Config()
     github_client = GitHubClient(config.github_token)
     notifier = Notifier(config.notification_settings)
-    llm = LLM()
+    llm = LLM(config.openAI_token,config.openAI_URL)
     report_generator = ReportGenerator(llm)
     subscription_manager = SubscriptionManager(config.subscriptions_file)
     command_handler = CommandHandler(github_client, subscription_manager, report_generator)
@@ -53,7 +53,7 @@ def main():
                     continue
                 args.func(args)
             except SystemExit as e:
-                LOG.error("Invalid command. Type 'help' to see the list of available commands.")
+                LOG.error(f"SystemExit error:{e}.Invalid command. Type 'help' to see the list of available commands.")
         except Exception as e:
             LOG.error(f"Unexpected error: {e}")
 
