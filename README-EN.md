@@ -12,6 +12,8 @@
     <br> <a href="README.md">中文</a> | English
 </p>
 
+GitHub Sentinel is an open-source tool AI Agent designed for developers and project managers. It automatically retrieves and aggregates updates from subscribed GitHub repositories on a regular basis (daily/weekly). Key features include subscription management, update retrieval, notification system, and report generation.
+Hacker News can automatically scrape trending topics from the forum at https://news.ycombinator.com/ and generate reports, which are then sent to users' email inboxes.
 ## Table of Contents
 
 - [GitHub Sentinel](#github-sentinel)
@@ -53,6 +55,7 @@ GitHub Sentinel is an `AI Agent` designed for the era of large language models (
 - **Graphical Interface**: Provides a simple and user-friendly GUI based on Gradio, making it accessible to a wider audience.
 - **Containerization**: The project supports Docker build and containerized deployment, allowing quick and easy setup in different environments.
 - **Continuous Integration**: Comprehensive unit tests are implemented, facilitating the configuration of production-level CI/CD pipelines to ensure project stability and high-quality delivery.
+- **UI interface**: Gradio Server.
 
 GitHub Sentinel not only helps users automatically track and analyze the progress of `GitHub open-source projects` but also extends its capabilities to other information sources, such as trending topics on `Hacker News`, providing a more comprehensive approach to information extraction and analysis.
 
@@ -99,7 +102,8 @@ Edit the `config.json` file to set up your GitHub Token, Email settings (using T
 }
 ```
 
-**For security reasons:** The GitHub Token and Email Password settings support using environment variables to avoid configuring sensitive information in plain text, as shown below:
+```
+**For security reasons:** It is recommended to configure the proxy url, proxy api key, GitHub Token and Email Password using environment variables to avoid storing sensitive information in plain text, as shown below:
 
 ```shell
 # Github

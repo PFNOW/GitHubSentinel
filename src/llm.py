@@ -8,8 +8,8 @@ from logger import LOG  # 导入日志模块
 class LLM:
     def __init__(self, config):
         """
-        初始化 LLM 类，根据配置选择使用的模型（OpenAI 或 Ollama），并预加载所有可能的提示信息。
-        
+        初始化 LLM 类，根据配置选择使用的模型（OpenAI 或 Ollama）。
+
         :param config: 配置对象，包含所有的模型配置参数。
         """
         self.config = config
@@ -22,7 +22,7 @@ class LLM:
         else:
             LOG.error(f"不支持的模型类型: {self.model}")
             raise ValueError(f"不支持的模型类型: {self.model}")  # 如果模型类型不支持，抛出错误
-        
+
         # 预加载所有可能的系统提示文件
         self._preload_prompts()
 
@@ -41,7 +41,7 @@ class LLM:
     def generate_report(self, report_type, markdown_content, dry_run=False):
         """
         生成报告，根据配置选择不同的模型来处理请求。
-        
+
         :param report_type: 报告类型（例如 "github" 或 "hacker_news"）。
         :param markdown_content: 用户提供的Markdown内容。
         :param dry_run: 如果为True，提示信息将保存到文件而不实际调用模型。
@@ -98,26 +98,29 @@ class LLM:
     def _generate_report_ollama(self, messages, report_type):
         """
         使用 Ollama LLaMA 模型生成报告。
-        
+
         :param messages: 包含系统提示和用户内容的消息列表。
         :param report_type: 报告类型（例如 "github" 或 "hacker_news"）。
         :return: 生成的报告内容。
         """
+        headers = {
+            "Authorization": f"Bearer {self.config.ollama_api_key}",  # 使用配置中的Ollama API密钥
+            "Content-Type": "application/json"
+            }
         LOG.info(f"使用 Ollama {self.config.ollama_model_name} 模型生成 {report_type} 报告。")
         try:
             payload = {
                 "model": self.config.ollama_model_name,  # 使用配置中的Ollama模型名称
-                "messages": messages,
-                "stream": False
+                "messages": messages
             }
-            response = requests.post(self.api_url, json=payload)  # 发送POST请求到Ollama API
+            response = requests.post(self.api_url,headers=headers, json=payload)  # 发送POST请求到Ollama API
             response_data = response.json()
-            
+
             # 调试输出查看完整的响应结构
-            LOG.debug("Ollama 响应: {}", response_data)
-            
+            LOG.debug("Ollama response: {}", response_data)
+
             # 直接从响应数据中获取 content
-            message_content = response_data.get("message", {}).get("content", None)
+            message_content = response_data['choices'][0]['message']['content']
             if message_content:
                 return message_content  # 返回生成的报告内容
             else:

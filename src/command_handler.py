@@ -1,15 +1,15 @@
 # src/command_handler.py
 
-import argparse
-
 import argparse  # 导入argparse库，用于处理命令行参数解析
 
-class CommandHandler:
-    def __init__(self, github_client, subscription_manager, report_generator):
+
+class GithubCommandHandler:
+    def __init__(self, github_client, subscription_manager, report_generator, email_notifier):
         # 初始化CommandHandler，接收GitHub客户端、订阅管理器和报告生成器
         self.github_client = github_client
         self.subscription_manager = subscription_manager
         self.report_generator = report_generator
+        self.notifier = email_notifier
         self.parser = self.create_parser()  # 创建命令行解析器
 
     def create_parser(self):
@@ -50,11 +50,17 @@ class CommandHandler:
         parser_generate.add_argument('file', type=str, help='The markdown file to generate report from')
         parser_generate.set_defaults(func=self.generate_daily_report)
 
+        # email通知命令
+        parser_notifier = subparsers.add_parser('notify', help='Send notifications by email.')
+        parser_notifier.add_argument('repo', type=str, help='The repository to test notifications for (e.g., owner/repo)')
+        parser_notifier.add_argument('file', type=str, help='The markdown file to send by email')
+        parser_notifier.set_defaults(func=self.email_notifier)
+
         # 帮助命令
         parser_help = subparsers.add_parser('help', help='Show help message')
         parser_help.set_defaults(func=self.print_help)
 
-        return parser  # 返回配置好的解析器
+        return parser  # 返回已配置的解析器
 
     # 下面是各种命令对应的方法实现，每个方法都使用了相应的管理器来执行实际操作，并输出结果信息
     def add_subscription(self, args):
@@ -82,6 +88,66 @@ class CommandHandler:
     def generate_daily_report(self, args):
         self.report_generator.generate_daily_report(args.file)
         print(f"Generated daily report from file: {args.file}")
+
+    def email_notifier(self, args):
+        with open(args.file, 'r') as f:
+            report = f.read()
+        self.notifier.notify(args.repo, report)
+        print("Email notifier sent successfully")
+
+    def print_help(self, args=None):
+        self.parser.print_help()  # 输出帮助信息
+
+
+class HackerNewsCommandHandler:
+    def __init__(self, hackernews_client, report_generator, email_notifier):
+    # 初始化CommandHandler，接收HackerNews客户端和报告生成器
+        self.hackernews_client = hackernews_client
+        self.report_generator = report_generator
+        self.notifier = email_notifier
+        self.parser = self.create_parser()  # 创建命令行解析器
+
+    def create_parser(self):
+        # 创建并配置命令行解析器
+        parser = argparse.ArgumentParser(
+            description='Hacker News Sentinel Command Line Interface',
+            formatter_class=argparse.RawTextHelpFormatter
+        )
+        subparsers = parser.add_subparsers(title='Commands', dest='command')
+
+        # 导出Hacker News报告命令
+        parser_export = subparsers.add_parser('export', help='Export daily progress')
+        parser_export.set_defaults(func=self.export_hacker_news)
+
+        # 生成Hacker News日报命令
+        parser_generate = subparsers.add_parser('generate', help='Generate hacker news daily report from markdown file')
+        parser_generate.add_argument('file', type=str, help='The markdown file to generate report from')
+        parser_generate.set_defaults(func=self.generate_hacker_news_report)
+
+        # email通知命令
+        parser_notifier = subparsers.add_parser('notify', help='Send notifications by email.')
+        parser_notifier.add_argument('file', type=str, help='The markdown file to send by email')
+        parser_notifier.set_defaults(func=self.email_notifier)
+
+        # 帮助命令
+        parser_help = subparsers.add_parser('help', help='Show help message')
+        parser_help.set_defaults(func=self.print_help)
+
+        return parser  # 返回已配置的解析器
+
+    def export_hacker_news(self, args=None):
+        file_path = self.hackernews_client.export_hackernews_stories()
+        print(f"Exported hacker news stories from file: {file_path}")
+
+    def generate_hacker_news_report(self, args):
+        self.report_generator.generate_hacker_news_report(args.file)
+        print(f"Generated daily report from file: {args.file}")
+
+    def email_notifier(self, args):
+        with open(args.file, 'r') as f:
+            report = f.read()
+        self.notifier.notify("Hacker News", report)
+        print("Email notifier sent successfully")
 
     def print_help(self, args=None):
         self.parser.print_help()  # 输出帮助信息
