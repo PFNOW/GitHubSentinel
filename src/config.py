@@ -6,9 +6,9 @@ class Config:
         self.update_interval = None
         self.subscriptions_file = None
         self.notification_settings = None
-        self.openAI_token=os.getenv("OPENAI_TOKEN")
+        self.openai_token=os.getenv("OPENAI_TOKEN")
         self.github_token = os.getenv("GITHUB_TOKEN")
-        self.openAI_URL=os.getenv("OPENAI_URL")
+        self.openai_url=os.getenv("OPENAI_URL")
 
         self.load_config()
     
