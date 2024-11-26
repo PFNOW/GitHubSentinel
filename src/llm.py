@@ -8,7 +8,7 @@ class LLM:
         # 创建一个OpenAI客户端实例
         self.client = OpenAI(base_url =openai_url, api_key = openai_token)
         # 从TXT文件加载提示信息
-        with open("prompts/report_prompt.txt", "r", encoding='utf-8') as file:
+        with open("../prompts/report_prompt.txt", "r", encoding='utf-8') as file:
             self.system_prompt = file.read()
         # 配置日志文件，当文件大小达到1MB时自动轮转，日志级别为DEBUG
         LOG.add("logs/llm_logs.log", rotation="1 MB", level="DEBUG")
