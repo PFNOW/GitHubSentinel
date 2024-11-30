@@ -1,5 +1,7 @@
-requests
-openai
-gradio
-loguru
-python-daemon
+requests~=2.31.0
+openai~=1.44.0
+gradio~=4.44.1
+loguru~=0.7.2
+python-daemon~=3.1.0
+fastapi~=0.115.5
+uvicorn~=0.32.1

@@ -11,6 +11,7 @@ GitHub Sentinel 是一个开源的工具 AI 代理，专为开发人员和项目
 - 更新检索
 - 通知系统
 - 报告生成
+- UI 界面
 
 ## 快速开始
 
@@ -80,4 +81,5 @@ python src/gradio_server.py
 ```
 
 - 这将在您的机器上启动一个 Web 服务器，允许您通过用户友好的界面管理订阅和生成报告。
-- 默认情况下，Gradio 服务器将可在 `http://localhost:7860` 访问，但如果需要，您可以公开共享它。
+- 默认情况下，你可以在 http://localhost:8000/report_generator_app 访问报告生成器，并在  http://localhost:8000/subscription_management_app 访问订阅管理器。
+- 受限于技术水平，报告生成器的功能还不完善，在网页中需要手动刷新得到正确的下拉菜单，建议使用命令行工具或后台进程模式。
