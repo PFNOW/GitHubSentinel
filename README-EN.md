@@ -53,6 +53,7 @@ GitHub Sentinel is an `AI Agent` designed for the era of large language models (
 - **Graphical Interface**: Provides a simple and user-friendly GUI based on Gradio, making it accessible to a wider audience.
 - **Containerization**: The project supports Docker build and containerized deployment, allowing quick and easy setup in different environments.
 - **Continuous Integration**: Comprehensive unit tests are implemented, facilitating the configuration of production-level CI/CD pipelines to ensure project stability and high-quality delivery.
+- **UI interface**: Gradio Server.
 
 GitHub Sentinel not only helps users automatically track and analyze the progress of `GitHub open-source projects` but also extends its capabilities to other information sources, such as trending topics on `Hacker News`, providing a more comprehensive approach to information extraction and analysis.
 
