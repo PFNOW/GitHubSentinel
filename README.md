@@ -1,13 +1,5 @@
 # GitHub Sentinel
 
-![GitHub stars](https://img.shields.io/github/stars/DjangoPeng/GitHubSentinel?style=social)
-![GitHub forks](https://img.shields.io/github/forks/DjangoPeng/GitHubSentinel?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/DjangoPeng/GitHubSentinel?style=social)
-![GitHub repo size](https://img.shields.io/github/repo-size/DjangoPeng/GitHubSentinel)
-![GitHub language count](https://img.shields.io/github/languages/count/DjangoPeng/GitHubSentinel)
-![GitHub top language](https://img.shields.io/github/languages/top/DjangoPeng/GitHubSentinel)
-![GitHub last commit](https://img.shields.io/github/last-commit/DjangoPeng/GitHubSentinel?color=red)
-
 <p align="center">
     <br> <a href="README-EN.md">English</a> | 中文
 </p>
@@ -19,6 +11,7 @@ GitHub Sentinel 是一个开源的工具 AI 代理，专为开发人员和项目
 - 更新检索
 - 通知系统
 - 报告生成
+- UI 界面
 
 ## 快速开始
 
@@ -32,7 +25,7 @@ pip install -r requirements.txt
 
 ### 2. 配置应用
 
-编辑 `config.json` 文件，以设置您的 GitHub Token、Email 设置（以腾讯企微邮箱为例）、订阅文件、更新设置，以及大模型服务配置（支持 OpenAI GPT API 和 Ollama 私有化大模型服务）：
+编辑 `config.json` 文件，以设置您的 GitHub Token、Email 设置（以腾讯企微邮箱为例）、订阅文件和更新设置：
 
 ```json
 {
@@ -47,16 +40,9 @@ pip install -r requirements.txt
     "slack_webhook_url": "your_slack_webhook_url",
     "subscriptions_file": "subscriptions.json",
     "github_progress_frequency_days": 1,
-    "github_progress_execution_time":"08:00",
-    "llm": {
-        "model_type": "openai",
-        "openai_model_name": "gpt-4o-mini",
-        "ollama_model_name": "llama3",
-        "ollama_api_url": "http://localhost:11434/api/chat"
-    }
+    "github_progress_execution_time":"08:00"
 }
 ```
-
 **出于安全考虑:** GitHub Token 和 Email Password 的设置均支持使用环境变量进行配置，以避免明文配置重要信息，如下所示：
 
 ```shell
@@ -65,12 +51,6 @@ export GITHUB_TOKEN="github_pat_xxx"
 # Email
 export EMAIL_PASSWORD="password"
 ```
-
-#### Ollama 安装与配置
-
-
-[Ollama 安装部署与服务发布](docs/ollama.md)
-
 
 ### 3. 如何运行
 
@@ -136,24 +116,6 @@ python src/command_tool.py
 python src/gradio_server.py
 ```
 
-![gradio_demo](images/gradio_demo.png)
-
 - 这将在您的机器上启动一个 Web 服务器，允许您通过用户友好的界面管理订阅和生成报告。
-- 默认情况下，Gradio 服务器将可在 `http://localhost:7860` 访问，但如果需要，您可以公开共享它。
-
-## 贡献
-
-贡献是使开源社区成为学习、激励和创造的惊人之处。非常感谢你所做的任何贡献。如果你有任何建议或功能请求，请先开启一个议题讨论你想要改变的内容。
-
-<a href='https://github.com/repo-reviews/repo-reviews.github.io/blob/main/create.md' target="_blank"><img alt='Github' src='https://img.shields.io/badge/review_me-100000?style=flat&logo=Github&logoColor=white&labelColor=888888&color=555555'/></a>
-
-## 许可证
-
-该项目根据Apache-2.0许可证的条款进行许可。详情请参见[LICENSE](LICENSE)文件。
-
-## 联系
-
-Django Peng - pjt73651@email.com
-
-项目链接: https://github.com/DjangoPeng/GitHubSentinel
-
+- 默认情况下，你可以在 http://localhost:8000/report_generator_app 访问报告生成器，并在  http://localhost:8000/subscription_management_app 访问订阅管理器。
+- 受限于技术水平，报告生成器的功能还不完善，在网页中需要手动刷新得到正确的下拉菜单，建议使用命令行工具或后台进程模式。

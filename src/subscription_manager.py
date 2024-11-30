@@ -20,8 +20,14 @@ class SubscriptionManager:
         if repo not in self.subscriptions:
             self.subscriptions.append(repo)
             self.save_subscriptions()
+            return "Subscription added successfully.\n"
+        else:
+            return "Subscription already exists.\n"
     
     def remove_subscription(self, repo):
         if repo in self.subscriptions:
             self.subscriptions.remove(repo)
             self.save_subscriptions()
+            return "Subscription removed successfully.\n"
+        else:
+            return "Repo does not exist.\n"
