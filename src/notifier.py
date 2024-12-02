@@ -34,25 +34,3 @@ class Notifier:
         except Exception as e:
             LOG.error(f"发送邮件失败：{str(e)}")
 
-if __name__ == '__main__':
-    from config import Config
-    config = Config()
-    notifier = Notifier(config.email)
-
-    test_repo = "DjangoPeng/openai-quickstart"
-    test_report = """
-# DjangoPeng/openai-quickstart 项目进展
-
-## 时间周期：2024-08-24
-
-## 新增功能
-- Assistants API 代码与文档
-
-## 主要改进
-- 适配 LangChain 新版本
-
-## 修复问题
-- 关闭了一些未解决的问题。
-
-"""
-    notifier.notify(test_repo, test_report)
