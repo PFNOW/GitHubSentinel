@@ -3,6 +3,7 @@ import os
 
 class Config:
     def __init__(self):
+        self.email = None
         self.update_interval = None
         self.subscriptions_file = None
         self.notification_settings = None
