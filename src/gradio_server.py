@@ -3,6 +3,7 @@ import uvicorn
 from fastapi import FastAPI  # 导入FastAPI库用于创建多个gradio接口
 from config import Config  # 导入配置管理模块
 from github_client import GitHubClient  # 导入用于GitHub API操作的客户端
+from hacker_news_client import HackerNewsClient  # 导入爬取Hacker News的包
 from report_generator import ReportGenerator  # 导入报告生成器模块
 from llm import LLM  # 导入可能用于处理语言模型的LLM类
 from subscription_manager import SubscriptionManager  # 导入订阅管理器
@@ -11,6 +12,7 @@ from logger import LOG  # 导入日志记录器
 # 创建各个组件的实例
 config = Config()
 github_client = GitHubClient(config.github_token)
+hacker_news_client = HackerNewsClient()
 llm = LLM(config)  # 创建语言模型实例
 report_generator = ReportGenerator(llm)
 subscription_manager = SubscriptionManager(config.subscriptions_file)
@@ -21,6 +23,22 @@ def read_main():
     """
     This is your main app. You can access the report generator app at http://localhost:8000/report_generator_app and access the subscription management app at http://localhost:8000/subscription_management_app
     """}
+
+# 定义一个用于生成hacker news报告的Gradio界面
+def generate_hacker_news():
+# 定义一个函数，用于导出和生成指定时间范围内项目的进展报告
+    raw_file_path = hacker_news_client.export_hackernews_stories()  # 导出原始数据文件路径
+    report, report_file_path = report_generator.generate_hacker_news_report(raw_file_path)  # 生成并获取报告内容及文件路径
+
+    return report, report_file_path  # 返回报告内容和报告文件路径
+
+# 创建Gradio界面
+hacker_news_app = gr.Interface(
+    fn=generate_hacker_news,  # 指定界面调用的函数
+    title="hacker news",  # 设置界面标题
+    inputs=[],  # 输入格式：无
+    outputs=[gr.Markdown(), gr.File(label="下载报告")],  # 输出格式：Markdown文本和文件下载
+)
 
 def export_progress_by_date_range(repo, days):
     # 定义一个函数，用于导出和生成指定时间范围内项目的进展报告
@@ -40,7 +58,7 @@ def refresh_list(repo):
     repo=refresh_subscription_list(subscription_list)  # 更新订阅列表
     return repo
 
-# 创建Gradio界面
+# 创建一个用于生成GitHub项目报告的Gradio界面
 with gr.Blocks(title="GitHubSentinel") as report_generator_app:
     with gr.Column():
         gr.Markdown(
@@ -97,7 +115,11 @@ app = gr.mount_gradio_app(app, report_generator_app, path="/report_generator_app
 app = gr.mount_gradio_app(app, subscription_management_app, path="/subscription_management_app",auth=("Admin", "1234567"))
 
 if __name__ == "__main__":
-    uvicorn.run(app, port=8000)
-    # 启动方式
-    # subscription_management_app.launch()
-    # report_generator_app.launch(share=True, server_name="0.0.0.0", auth=("Admin", "1234567"))
+    # 启动FastAPI服务
+    #uvicorn.run(app, port=8000)
+
+    # gradio启动方式
+    # report_generator_app.launch()
+    # subscription_management_app.launch(auth=("Admin", "1234567"))
+    hacker_news_app.launch()
+
