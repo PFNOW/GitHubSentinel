@@ -2,6 +2,8 @@ import json
 import os
 class Config:
     def __init__(self):
+        self.exec_time = None
+        self.freq_days = None
         self.email = None
         self.update_interval = None
         self.subscriptions_file = None
