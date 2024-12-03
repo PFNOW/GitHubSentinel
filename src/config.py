@@ -3,12 +3,6 @@ import os
 
 class Config:
     def __init__(self):
-        self.exec_time = None
-        self.freq_days = None
-        self.email = None
-        self.update_interval = None
-        self.subscriptions_file = None
-        self.notification_settings = None
         self.openai_token=os.getenv("OPENAI_TOKEN")
         self.github_token = os.getenv("GITHUB_TOKEN")
         self.openai_url=os.getenv("OPENAI_URL")
@@ -41,4 +35,5 @@ class Config:
             self.llm_model_type = llm_config.get('model_type', 'openai')
             self.openai_model_name = llm_config.get('openai_model_name', 'gpt-4o-mini')
             self.ollama_model_name = llm_config.get('ollama_model_name', 'llama3')
-            self.ollama_api_url = llm_config.get('ollama_api_url', 'http://localhost:11434/api/chat')
+            self.ollama_api_url = llm_config.get('ollama_api_url', 'http://localhost:3000/api/chat/completions')
+            self.ollama_api_key = llm_config.get('ollama_api_key')

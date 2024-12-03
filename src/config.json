@@ -1,11 +1,11 @@
 {
-    "github_token": "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",
+    "github_token": "",
     "email":  {
         "smtp_server": "smtp.exmail.qq.com",
         "smtp_port": 465,
-        "from": "pjt@zaijidata.com",
+        "from": "lx2023@mails.ccnu.edu.cn",
         "password": "",
-        "to": "test@zaijidata.com"
+        "to": "1609828557@qq.com"
     },
     "slack_webhook_url": "your_slack_webhook_url",
     "subscriptions_file": "subscriptions.json",
@@ -14,7 +14,8 @@
     "llm": {
         "model_type": "ollama",
         "openai_model_name": "gpt-4o-mini",
-        "ollama_model_name": "llama3",
-        "ollama_api_url": "http://localhost:11434/api/chat"
+        "ollama_model_name": "llamafamily/llama3-chinese-8b-instruct:latest",
+        "ollama_api_url": "http://localhost:3000/api/chat/completions",
+        "ollama_api_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2MGZlNDFmLTYxZmItNDAzZi1iNzM2LTBiMzkxYTE0ZDYwMyJ9.Uv1qDRc_3fUJNv7hbl3d7zYiltKpq05Y2kSvlwz1vCc"
     }
 }

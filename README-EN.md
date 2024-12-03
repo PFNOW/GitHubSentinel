@@ -5,6 +5,7 @@
 </p>
 
 GitHub Sentinel is an open-source tool AI Agent designed for developers and project managers. It automatically retrieves and aggregates updates from subscribed GitHub repositories on a regular basis (daily/weekly). Key features include subscription management, update retrieval, notification system, and report generation.
+Hacker News can automatically scrape trending topics from the forum at https://news.ycombinator.com/ and generate reports, which are then sent to users' email inboxes.
 
 ## Features
 - Subscription management
@@ -41,11 +42,18 @@ Edit the `config.json` file to set up your GitHub token, Email settings(e.g.Tenc
     "slack_webhook_url": "your_slack_webhook_url",
     "subscriptions_file": "subscriptions.json",
     "github_progress_frequency_days": 1,
-    "github_progress_execution_time":"08:00"
+    "github_progress_execution_time":"08:00",
+    "llm": {
+        "model_type": "ollama",
+        "openai_model_name": "gpt-4o-mini",
+        "ollama_model_name": "llamafamily/llama3-chinese-8b-instruct:latest",
+        "ollama_api_url": "http://localhost:11434/api/chat",
+        "ollama_api_key": "your_ollama_api_key"
+    }
 }
 
 ```
-**For security reasons:** It is recommended to configure the GitHub Token and Email Password using environment variables to avoid storing sensitive information in plain text, as shown below:
+**For security reasons:** It is recommended to configure the proxy url, proxy api key, GitHub Token and Email Password using environment variables to avoid storing sensitive information in plain text, as shown below:
 
 ```shell
 # GitHub
@@ -120,5 +128,5 @@ python src/gradio_server.py
 
 
 - This will start a web server on your machine, allowing you to manage subscriptions and generate reports through a user-friendly interface.
-- By default, You can access the report generator app at http://localhost:8000/report_generator_app and access the subscription management app at http://localhost:8000/subscription_management_app
+- You can access the report generator app at http://localhost:8000/report_generator_app , access the subscription management app at http://localhost:8000/subscription_management_app , and access the hacker news app at http://localhost:8000/hacker_news_app 
 - Due to technical limitations, the functionality of the report generator is not yet fully developed. To obtain the correct dropdown menu in the webpage, manual refreshing is required. It is recommended to use command-line tools or operate in background process mode.
