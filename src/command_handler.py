@@ -56,6 +56,11 @@ class GithubCommandHandler:
         parser_notifier.add_argument('file', type=str, help='The markdown file to send by email')
         parser_notifier.set_defaults(func=self.email_notifier)
 
+        # 切换api
+        parser_switch_api = subparsers.add_parser('switch-api', help='Switch API to ollama or openai')
+        parser_switch_api.add_argument('api', type=str, help='The API to switch to (ollama or openai)')
+        parser_switch_api.set_defaults(func=self.switch_api)
+
         # 帮助命令
         parser_help = subparsers.add_parser('help', help='Show help message')
         parser_help.set_defaults(func=self.print_help)
@@ -63,6 +68,15 @@ class GithubCommandHandler:
         return parser  # 返回已配置的解析器
 
     # 下面是各种命令对应的方法实现，每个方法都使用了相应的管理器来执行实际操作，并输出结果信息
+    def switch_api(self, args):
+        api_name = args.api.lower()
+        if api_name not in ['ollama', 'openai']:
+            print(f"Invalid API: {api_name}")
+            return False
+        self.report_generator.switch_api(api_name)
+        print(f"Switched to {args.api} API")
+
+
     def add_subscription(self, args):
         self.subscription_manager.add_subscription(args.repo)
         print(f"Added subscription for repository: {args.repo}")
@@ -126,14 +140,27 @@ class HackerNewsCommandHandler:
 
         # email通知命令
         parser_notifier = subparsers.add_parser('notify', help='Send notifications by email.')
-        parser_notifier.add_argument('file', type=str, help='The markdown file to send by email')
+        parser_notifier.add_argument('file', type=str, help='The markdown file to send by email ')
         parser_notifier.set_defaults(func=self.email_notifier)
+
+        # 切换api
+        parser_switch_api = subparsers.add_parser('switch-api', help='Switch API to ollama or openai')
+        parser_switch_api.add_argument('api', type=str, help='The API to switch to (ollama or openai)')
+        parser_switch_api.set_defaults(func=self.switch_api)
 
         # 帮助命令
         parser_help = subparsers.add_parser('help', help='Show help message')
         parser_help.set_defaults(func=self.print_help)
 
         return parser  # 返回已配置的解析器
+
+    def switch_api(self, args):
+        api_name = args.api.lower()
+        if api_name not in ['ollama', 'openai']:
+            print(f"Invalid API: {api_name}")
+            return False
+        self.report_generator.switch_api(api_name)
+        print(f"Switched to {args.api} API")
 
     def export_hacker_news(self, args=None):
         file_path = self.hackernews_client.export_hackernews_stories()

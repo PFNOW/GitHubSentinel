@@ -3,10 +3,7 @@ import os
 
 class Config:
     def __init__(self):
-        self.openai_token=os.getenv("OPENAI_TOKEN")
-        self.github_token = os.getenv("GITHUB_TOKEN")
-        self.openai_url=os.getenv("OPENAI_URL")
-
+        # 加载配置
         self.load_config()
     
     def load_config(self):
@@ -32,6 +29,8 @@ class Config:
 
             # 加载 LLM 相关配置
             llm_config = config.get('llm', {})
+            self.openai_token = os.getenv("OPENAI_TOKEN", llm_config.get('openai_token'))
+            self.openai_url = os.getenv("OPENAI_URL", llm_config.get('openai_url'))
             self.llm_model_type = llm_config.get('model_type', 'openai')
             self.openai_model_name = llm_config.get('openai_model_name', 'gpt-4o-mini')
             self.ollama_model_name = llm_config.get('ollama_model_name', 'llama3')

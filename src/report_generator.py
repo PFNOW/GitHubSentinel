@@ -58,3 +58,7 @@ class ReportGenerator:
 
         return report, report_file_path
 
+    def switch_api(self, api_name):
+        # 切换API，用于测试不同API的效果
+        self.llm.switch_api(api_name)
+
