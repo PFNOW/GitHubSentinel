@@ -14,6 +14,8 @@
     },
     "llm": {
         "model_type": "ollama",
+        "openai_token": "",
+        "openai_url": "",
         "openai_model_name": "gpt-4o-mini",
         "ollama_model_name": "llamafamily/llama3-chinese-8b-instruct:latest",
         "ollama_api_url": "http://localhost:3000/api/chat/completions",
