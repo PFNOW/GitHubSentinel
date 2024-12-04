@@ -32,19 +32,33 @@ def generate_hacker_news():
 
     return report, report_file_path  # 返回报告内容和报告文件路径
 
-# 创建Gradio界面
-hacker_news_app = gr.Interface(
-    fn=generate_hacker_news,  # 指定界面调用的函数
-    title="hacker news",  # 设置界面标题
-    inputs=[],  # 输入格式：无
-    outputs=[gr.Markdown(), gr.File(label="下载报告")],  # 输出格式：Markdown文本和文件下载
-)
+# 切换API类型
+def switch_api(api_name):
+    print(f"Switching to {api_name} API")
+    report_generator.switch_api(api_name)  # 切换API类型
+
+# 创建Hacker news的Gradio界面
+with gr.Blocks(title="hacker news") as hacker_news_app:
+    gr.Markdown(
+        """
+        # Hacker news报告生成器
+        """
+    )
+    with gr.Row():
+        with gr.Column():
+            api_name = gr.Dropdown(["ollama", "openai"], value=config.llm_model_type,label="API类型")
+            switch_api_button = gr.Button("切换")
+            switch_api_button.click(fn=switch_api, inputs=api_name, outputs=[])  # 点击按钮切换到API
+        with gr.Column():
+            generator_button = gr.Button("生成报告")  # 生成报告按钮
+            generator_button.click(generate_hacker_news, inputs=[],
+                                   outputs=[gr.Markdown(), gr.File(label="下载报告")], )
+
 
 def export_progress_by_date_range(repo, days):
     # 定义一个函数，用于导出和生成指定时间范围内项目的进展报告
     raw_file_path = github_client.export_progress_by_date_range(repo, days)  # 导出原始数据文件路径
-    report, report_file_path = report_generator.generate_daily_report(raw_file_path)  # 生成并获取报告内容及文件路径
-
+    report, report_file_path = report_generator.generate_report_by_date_range(raw_file_path, days)  # 生成并获取报告内容及文件路径
     return report, report_file_path  # 返回报告内容和报告文件路径
 
 # 定义一个函数，用于刷新订阅的GitHub项目
@@ -60,22 +74,27 @@ def refresh_list(repo):
 
 # 创建一个用于生成GitHub项目报告的Gradio界面
 with gr.Blocks(title="GitHubSentinel") as report_generator_app:
-    with gr.Column():
-        gr.Markdown(
-            """
-            # GitHubSentinel报告生成器
-            ## 请选择订阅的GitHub项目，并选择生成报告的时间范围。
-            """
-        )
-        report_name = gr.Dropdown(
-            subscription_manager.list_subscriptions(), label="订阅列表", info="已订阅GitHub项目"
-        )  # 下拉菜单选择订阅的GitHub项目
-        refresh_button = gr.Button("刷新下拉菜单")  # 刷新按钮刷新下拉菜单
-        refresh_button.click(refresh_list, inputs=report_name,outputs=report_name)
-        report_days = gr.Slider(value=2, minimum=1, maximum=7, step=1, label="报告周期",
-                                info="生成项目过去一段时间进展，单位：天")  # 滑动条选择报告的时间范围
-        generator_button = gr.Button("生成报告")  # 生成报告按钮
-        generator_button.click(export_progress_by_date_range, inputs=[report_name, report_days],outputs=[gr.Markdown(), gr.File(label="下载报告")],)
+    gr.Markdown(
+        """
+        # GitHubSentinel报告生成器
+        ## 请选择订阅的GitHub项目，并选择生成报告的时间范围。
+        """
+    )
+    with gr.Row():
+        with gr.Column():
+            api_name = gr.Dropdown(["ollama", "openai"], value=config.llm_model_type, label="API类型")
+            switch_api_button = gr.Button("切换")
+            switch_api_button.click(fn=switch_api, inputs=api_name, outputs=[])  # 点击按钮切换到API
+            report_name = gr.Dropdown(
+                subscription_manager.list_subscriptions(), label="订阅列表", info="已订阅GitHub项目"
+            )  # 下拉菜单选择订阅的GitHub项目
+            refresh_button = gr.Button("刷新下拉菜单")  # 刷新按钮刷新下拉菜单
+            refresh_button.click(refresh_list, inputs=report_name,outputs=report_name)
+            report_days = gr.Slider(value=2, minimum=1, maximum=7, step=1, label="报告周期",
+                                    info="生成项目过去一段时间进展，单位：天")  # 滑动条选择报告的时间范围
+        with gr.Column():
+            generator_button = gr.Button("生成报告")  # 生成报告按钮
+            generator_button.click(export_progress_by_date_range, inputs=[report_name, report_days],outputs=[gr.Markdown(), gr.File(label="下载报告")],)
 
 # 定义一个函数，用于移除订阅的GitHub项目
 def remove_subscription(removed_repo):
@@ -121,6 +140,6 @@ if __name__ == "__main__":
 
     # gradio启动方式
     # report_generator_app.launch()
-    # subscription_management_app.launch(auth=("Admin", "1234567"))
-    hacker_news_app.launch()
+    subscription_management_app.launch(auth=("Admin", "1234567"))
+    # hacker_news_app.launch()
 

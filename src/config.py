@@ -3,6 +3,13 @@ import os
 
 class Config:
     def __init__(self):
+        self.slack_webhook_url = None
+        self.report_types = None
+        self.llm_model_type = None
+        self.openai_model_name = None
+        self.ollama_model_name = None
+        self.ollama_api_url = None
+        self.ollama_api_key = None
         self.exec_time = None
         self.freq_days = None
         self.email = None
@@ -46,7 +53,7 @@ class Config:
             self.openai_model_name = llm_config.get('openai_model_name', 'gpt-4o-mini')
             self.ollama_model_name = llm_config.get('ollama_model_name', 'llama3')
             self.ollama_api_url = llm_config.get('ollama_api_url', 'http://localhost:3000/api/chat/completions')
-            self.ollama_api_key = llm_config.get('ollama_api_key')
+            self.ollama_api_key = os.getenv("OLLAMA_API_KEY", llm_config.get('ollama_api_key'))
 
             # 加载报告类型配置
             self.report_types = config.get('report_types', ["github", "hacker_news"])  # 默认报告类型
