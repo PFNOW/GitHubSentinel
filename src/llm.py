@@ -15,10 +15,11 @@ class LLM:
         self.config = config
         self.model = config.llm_model_type.lower()  # 获取模型类型并转换为小写
         self.prompts = {}  # 存储所有预加载的提示信息
+        self.client = None
         if self.model == "openai":
-            self.client = OpenAI()  # 创建OpenAI客户端实例
+            self.client = OpenAI(base_url=self.config.openai_url, api_key=self.config.openai_token)  # 创建OpenAI客户端实例
         elif self.model == "ollama":
-            self.api_url = config.ollama_api_url  # 设置Ollama API的URL
+            self.api_url = self.config.ollama_api_url  # 设置Ollama API的URL
         else:
             LOG.error(f"不支持的模型类型: {self.model}")
             raise ValueError(f"不支持的模型类型: {self.model}")  # 如果模型类型不支持，抛出错误
@@ -69,8 +70,10 @@ class LLM:
 
         # 根据选择的模型调用相应的生成报告方法
         if self.model == "openai":
+            self.client = OpenAI(base_url=self.config.openai_url, api_key=self.config.openai_token)  # 创建OpenAI客户端实例
             return self._generate_report_openai(messages, report_type)
         elif self.model == "ollama":
+            self.api_url = self.config.ollama_api_url  # 设置Ollama API的URL
             return self._generate_report_ollama(messages, report_type)
         else:
             raise ValueError(f"不支持的模型类型: {self.model}")
@@ -129,6 +132,10 @@ class LLM:
         except Exception as e:
             LOG.error(f"生成报告时发生错误：{e}")
             raise
+
+    def switch_api(self, api_name):
+        self.model = api_name.lower()
+
 
 
 if __name__ == '__main__':
