@@ -35,4 +35,4 @@ class Config:
             self.openai_model_name = llm_config.get('openai_model_name', 'gpt-4o-mini')
             self.ollama_model_name = llm_config.get('ollama_model_name', 'llama3')
             self.ollama_api_url = llm_config.get('ollama_api_url', 'http://localhost:3000/api/chat/completions')
-            self.ollama_api_key = llm_config.get('ollama_api_key')
+            self.ollama_api_key = os.getenv("OLLAMA_API_KEY", llm_config.get('ollama_api_key'))

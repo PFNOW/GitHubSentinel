@@ -13,7 +13,7 @@ class LLM:
         self.model = config.llm_model_type.lower()  # 获取模型类型并转换为小写
         if self.model == "openai":
             from openai import OpenAI  # 导入OpenAI库用于访问GPT模型
-            self.client = OpenAI(base_url=selfconfig.openai_url, api_key=self.config.openai_token)  # 创建OpenAI客户端实例
+            self.client = OpenAI(base_url=self.config.openai_url, api_key=self.config.openai_token)  # 创建OpenAI客户端实例
         elif self.model == "ollama":
             self.api_url = self.config.ollama_api_url  # 设置Ollama API的URL
         else:
