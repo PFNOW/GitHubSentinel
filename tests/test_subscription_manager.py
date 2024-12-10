@@ -7,7 +7,7 @@ from unittest.mock import patch, mock_open, call
 # 添加 src 目录到模块搜索路径，以便可以导入 src 目录中的模块
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from subscription_manager import SubscriptionManager  # 导入要测试的 SubscriptionManager 类
+from src.subscription_manager import SubscriptionManager  # 导入要测试的 SubscriptionManager 类
 
 class TestSubscriptionManager(unittest.TestCase):
     def setUp(self):

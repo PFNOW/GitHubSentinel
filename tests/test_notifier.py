@@ -6,9 +6,9 @@ from io import StringIO
 # 将 src 目录添加到模块搜索路径，方便导入项目中的模块
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from config import Config  # 导入配置类
-from notifier import Notifier  # 导入要测试的 Notifier 类
-from logger import LOG  # 导入日志记录器
+from src.config import Config  # 导入配置类
+from src.notifier import Notifier  # 导入要测试的 Notifier 类
+from src.logger import LOG  # 导入日志记录器
 
 class TestNotifier(unittest.TestCase):
     def setUp(self):

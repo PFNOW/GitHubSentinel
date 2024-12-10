@@ -8,8 +8,8 @@ from io import StringIO
 # 将 src 目录添加到模块搜索路径，方便导入项目中的模块
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from config import Config  # 导入配置类
-from llm import LLM  # 导入要测试的 LLM 类
+from src.config import Config  # 导入配置类
+from src.llm import LLM  # 导入要测试的 LLM 类
 
 class TestLLM(unittest.TestCase):
     def setUp(self):

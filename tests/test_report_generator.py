@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 # 添加 src 目录到模块搜索路径，以便可以导入 src 目录中的模块
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from report_generator import ReportGenerator  # 导入要测试的 ReportGenerator 类
+from src.report_generator import ReportGenerator  # 导入要测试的 ReportGenerator 类
 
 class TestReportGenerator(unittest.TestCase):
     def setUp(self):
