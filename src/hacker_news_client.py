@@ -2,7 +2,7 @@ import os # 导入os模块用于文件和目录操作
 import requests # 导入requests库用于HTTP请求
 from bs4 import BeautifulSoup # 使用BeautifulSoup解析网页
 from datetime import datetime  # 导入日期处理模块
-from logger import LOG  # 导入日志模块
+from src.logger import LOG  # 导入日志模块
 
 class HackerNewsClient:
     def __init__(self):
@@ -44,6 +44,7 @@ class HackerNewsClient:
         # 更新文件名以包含日期范围
         date_str = f"{today}"
         file_path = os.path.join(repo_dir, f'{date_str}.md')  # 构建文件路径
+        LOG.info(f"Hacker News 报告路径： {file_path}")  # 记录日志
         with open(file_path, 'w', encoding='utf-8') as file:
             file.write(f"# Daily Progress for Hacker News ({today})\n\n")
             for id, story  in enumerate(stories, start=1):  # 写入每条新闻

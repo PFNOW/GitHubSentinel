@@ -1,4 +1,5 @@
 import gradio as gr  # 导入gradio库用于创建GUI
+import requests
 import uvicorn
 from fastapi import FastAPI  # 导入FastAPI库用于创建多个gradio接口
 from config import Config  # 导入配置管理模块
@@ -27,9 +28,8 @@ def read_main():
 # 定义一个用于生成hacker news报告的Gradio界面
 def generate_hacker_news():
 # 定义一个函数，用于导出和生成指定时间范围内项目的进展报告
-    raw_file_path = hacker_news_client.export_hackernews_stories()  # 导出原始数据文件路径
-    report, report_file_path = report_generator.generate_hacker_news_report(raw_file_path)  # 生成并获取报告内容及文件路径
-
+    markdown_file_path = hacker_news_client.export_hackernews_stories()  # 导出原始数据文件路径
+    report, report_file_path = report_generator.generate_daily_report(markdown_file_path, "hacker_news") # 生成并获取报告内容及文件路径
     return report, report_file_path  # 返回报告内容和报告文件路径
 
 # 切换API类型
@@ -100,15 +100,20 @@ with gr.Blocks(title="GitHubSentinel") as report_generator_app:
 def remove_subscription(removed_repo):
     result=subscription_manager.remove_subscription(removed_repo)  # 移除订阅
     subscription_list = subscription_manager.list_subscriptions()  # 获取订阅列表
-    removed_repo = refresh_subscription_list( subscription_list)  # 更新订阅列表
-    return result,removed_repo  # 返回订阅列表
+    repo = refresh_subscription_list( subscription_list)  # 更新订阅列表
+    return result, repo  # 返回订阅列表
 
 # 定义一个函数，用于添加订阅的GitHub项目
 def add_subscription(added_repo):
-    result=subscription_manager.add_subscription(added_repo)  # 添加订阅
-    subscription_list = subscription_manager.list_subscriptions()  # 获取订阅列表
-    removed_repo = refresh_subscription_list(subscription_list)  # 更新订阅列表
-    return result, removed_repo # 返回订阅列表
+    url = f"https://api.github.com/repos/{added_repo}"  # 构造GitHub API地址
+    response = requests.get(url)
+    if response.status_code == 200: # 仓库存在
+        result=subscription_manager.add_subscription(added_repo)  # 添加订阅
+        subscription_list = subscription_manager.list_subscriptions()  # 获取订阅列表
+        repo = refresh_subscription_list(subscription_list)  # 更新订阅列表
+        return result, repo # 返回订阅列表
+    else:
+        return "仓库不存在", added_repo  # 返回订阅列表
 
 # 创建管理界面
 with gr.Blocks (title="GitHubSentinel管理界面") as subscription_management_app: # 设置界面标题
@@ -118,17 +123,17 @@ with gr.Blocks (title="GitHubSentinel管理界面") as subscription_management_a
         ## 管理订阅的GitHub项目，请慎重操作。
         """
     )
-    with gr.Column(): # 移除订阅
-        remove_name=gr.Dropdown(subscription_manager.list_subscriptions(), label="移除订阅", info="移除已订阅GitHub项目"),  # 下拉菜单选择订阅的GitHub项目
-        remove_result=gr.Textbox(label="操作结果"),  # 显示订阅列表
-        gr.Button("移除订阅").click(fn=remove_subscription,inputs=remove_name,outputs=[remove_result[0],remove_name[0]]),
-        # 传多个值：https://blog.csdn.net/weixin_45729192/article/details/139442890
-        # 下拉菜单实时更新：https://blog.csdn.net/qq_41413211/article/details/131332555
-
-    with gr.Column(): # 添加订阅
-        add_name=gr.Textbox(label="添加订阅"),  # 输入框输入GitHub项目名称
-        add_result=gr.Textbox(label="操作结果"),  # 显示订阅列表
-        gr.Button("添加订阅").click(fn=add_subscription,inputs=add_name,outputs=[add_result[0],remove_name[0]])
+    with gr.Row():
+        with gr.Column(): # 移除订阅
+            remove_name=gr.Dropdown(subscription_manager.list_subscriptions(), label="移除订阅", info="移除已订阅GitHub项目"),  # 下拉菜单选择订阅的GitHub项目
+            remove_result=gr.Textbox(label="操作结果"),  # 显示订阅列表
+            gr.Button("移除订阅").click(fn=remove_subscription,inputs=remove_name,outputs=[remove_result[0],remove_name[0]]),
+            # 传多个值：https://blog.csdn.net/weixin_45729192/article/details/139442890
+            # 下拉菜单实时更新：https://blog.csdn.net/qq_41413211/article/details/131332555
+        with gr.Column(): # 添加订阅
+            add_name=gr.Textbox(label="添加订阅", info="添加订阅时，请按照格式输入：owner/repo"),  # 输入框输入GitHub项目名称
+            add_result=gr.Textbox(label="操作结果"),  # 显示订阅列表
+            gr.Button("添加订阅").click(fn=add_subscription,inputs=add_name,outputs=[add_result[0],remove_name[0]])
 
 app = gr.mount_gradio_app(app, report_generator_app, path="/report_generator_app")
 app = gr.mount_gradio_app(app, subscription_management_app, path="/subscription_management_app",auth=("Admin", "1234567"))
@@ -140,6 +145,6 @@ if __name__ == "__main__":
 
     # gradio启动方式
     # report_generator_app.launch()
-    subscription_management_app.launch(auth=("Admin", "1234567"))
-    # hacker_news_app.launch()
+    # subscription_management_app.launch(auth=("Admin", "1234567"))
+    hacker_news_app.launch()
 
