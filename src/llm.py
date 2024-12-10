@@ -103,21 +103,24 @@ class LLM:
         :param report_type: 报告类型（例如 "github" 或 "hacker_news"）。
         :return: 生成的报告内容。
         """
+        headers = {
+            "Authorization": f"Bearer {self.config.ollama_api_key}",  # 使用配置中的Ollama API密钥
+            "Content-Type": "application/json"
+            }
         LOG.info(f"使用 Ollama {self.config.ollama_model_name} 模型生成 {report_type} 报告。")
         try:
             payload = {
                 "model": self.config.ollama_model_name,  # 使用配置中的Ollama模型名称
-                "messages": messages,
-                "stream": False
+                "messages": messages
             }
-            response = requests.post(self.api_url, json=payload)  # 发送POST请求到Ollama API
+            response = requests.post(self.api_url,headers=headers, json=payload)  # 发送POST请求到Ollama API
             response_data = response.json()
 
             # 调试输出查看完整的响应结构
             LOG.debug("Ollama response: {}", response_data)
 
             # 直接从响应数据中获取 content
-            message_content = response_data.get("message", {}).get("content", None)
+            message_content = response_data['choices'][0]['message']['content']
             if message_content:
                 return message_content  # 返回生成的报告内容
             else:

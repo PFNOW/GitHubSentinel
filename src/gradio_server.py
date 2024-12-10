@@ -21,7 +21,7 @@ app = FastAPI()# 定义FastAPI应用
 def read_main():
     return {"message":
     """
-    This is your main app. You can access the report generator app at http://localhost:8000/report_generator_app and access the subscription management app at http://localhost:8000/subscription_management_app
+    This is your main app. You can access the report generator app at http://localhost:8000/report_generator_app , access the subscription management app at http://localhost:8000/subscription_management_app , and access the hacker news app at http://localhost:8000/hacker_news_app 
     """}
 
 # 定义一个用于生成hacker news报告的Gradio界面
@@ -113,6 +113,7 @@ with gr.Blocks (title="GitHubSentinel管理界面") as subscription_management_a
 
 app = gr.mount_gradio_app(app, report_generator_app, path="/report_generator_app")
 app = gr.mount_gradio_app(app, subscription_management_app, path="/subscription_management_app",auth=("Admin", "1234567"))
+app = gr.mount_gradio_app(app, hacker_news_app, path="/hacker_news_app")
 
 if __name__ == "__main__":
     # 启动FastAPI服务

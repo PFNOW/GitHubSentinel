@@ -12,6 +12,8 @@
     <br> <a href="README-EN.md">English</a> | 中文
 </p>
 
+GitHub Sentinel 是一个开源的工具 AI 代理，专为开发人员和项目经理设计。它会定期（每日/每周）自动从订阅的 GitHub 仓库中检索和汇总更新。主要功能包括订阅管理、更新检索、通知系统和报告生成。
+Hacker News可以自动爬取 https://news.ycombinator.com/ 论坛的热点话题并生成报告，并将其推送到用户的邮箱。
 ## 目录
 
 - [GitHub Sentinel](#github-sentinel)
@@ -98,16 +100,18 @@ pip install -r requirements.txt
         "model_type": "ollama",
         "openai_model_name": "gpt-4o-mini",
         "ollama_model_name": "llama3",
-        "ollama_api_url": "http://localhost:11434/api/chat"
+        "ollama_api_url": "http://localhost:11434/api/chat",
+        "ollama_api_key": "your_ollama_api_key"
     },
     "report_types": ["github"],
     "slack": {
         "webhook_url": "your_slack_webhook_url"
     }
 }
+
 ```
 
-**出于安全考虑:** GitHub Token 和 Email Password 的设置均支持使用环境变量进行配置，以避免明文配置重要信息，如下所示：
+**出于安全考虑:** 中转API地址、中转API密钥、GitHub Token 和 Email Password 的设置均支持使用环境变量进行配置，以避免明文配置重要信息，如下所示：
 
 ```shell
 # Github
@@ -115,7 +119,6 @@ export GITHUB_TOKEN="github_pat_xxx"
 # Email
 export EMAIL_PASSWORD="password"
 ```
-
 
 ### 3. 如何运行
 
@@ -184,7 +187,8 @@ python src/gradio_server.py
 ![gradio_demo](images/gradio_demo.png)
 
 - 这将在您的机器上启动一个 Web 服务器，允许您通过用户友好的界面管理订阅和生成报告。
-- 默认情况下，Gradio 服务器将可在 `http://localhost:7860` 访问，但如果需要，您可以公开共享它。
+- 默认情况下，你可以在 http://localhost:8000/report_generator_app 访问GitHub Sentinel的报告生成器，在  http://localhost:8000/subscription_management_app 访问GitHub Sentinel的订阅管理器，在 http://localhost:8000/hacker_news_app 访问hacker news app。
+- 受限于技术水平，报告生成器的功能还不完善，在网页中需要手动刷新得到正确的下拉菜单，建议使用命令行工具或后台进程模式。
 
 
 ## Ollama 安装与服务发布
@@ -296,5 +300,3 @@ chmod +x build_image.sh
 ## 联系
 
 Django Peng - pjt73651@email.com
-
-项目链接: https://github.com/DjangoPeng/GitHubSentinel

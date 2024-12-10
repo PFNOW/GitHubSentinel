@@ -45,7 +45,7 @@ class ReportGenerator:
         with open(markdown_file_path, 'r', encoding='utf-8') as file:
             markdown_content = file.read()
 
-        with open("../prompts/hacker_news_prompt.txt", "r", encoding='utf-8') as file:
+        with open("prompts/hacker_news_prompt.txt", "r", encoding='utf-8') as file:
             self.llm.system_prompt = file.read()
 
         report = self.llm.generate_daily_report(markdown_content)  # 调用LLM生成报告

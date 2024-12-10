@@ -12,6 +12,8 @@
     <br> <a href="README.md">中文</a> | English
 </p>
 
+GitHub Sentinel is an open-source tool AI Agent designed for developers and project managers. It automatically retrieves and aggregates updates from subscribed GitHub repositories on a regular basis (daily/weekly). Key features include subscription management, update retrieval, notification system, and report generation.
+Hacker News can automatically scrape trending topics from the forum at https://news.ycombinator.com/ and generate reports, which are then sent to users' email inboxes.
 ## Table of Contents
 
 - [GitHub Sentinel](#github-sentinel)
@@ -100,7 +102,8 @@ Edit the `config.json` file to set up your GitHub Token, Email settings (using T
 }
 ```
 
-**For security reasons:** The GitHub Token and Email Password settings support using environment variables to avoid configuring sensitive information in plain text, as shown below:
+```
+**For security reasons:** It is recommended to configure the proxy url, proxy api key, GitHub Token and Email Password using environment variables to avoid storing sensitive information in plain text, as shown below:
 
 ```shell
 # Github
