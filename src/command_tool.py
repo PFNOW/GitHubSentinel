@@ -14,6 +14,12 @@ def main():
     config = Config()  # 创建配置实例
     email_notifier = Notifier(config.email)  # 创建通知器实例
     llm = LLM(config)  # 创建语言模型实例
+    # report_generator = ReportGenerator(llm, config.report_types)  # 创建报告生成器实例
+    # subscription_manager = SubscriptionManager(config.subscriptions_file)  # 创建订阅管理器实例
+    # command_handler = CommandHandler(github_client, subscription_manager, report_generator)  # 创建命令处理器实例
+    #
+    # parser = command_handler.parser  # 获取命令解析器
+    # command_handler.print_help()  # 打印帮助信息
     report_generator = ReportGenerator(llm)  # 创建报告生成器实例
 
     while True: # 启用项目
@@ -48,7 +54,6 @@ def main():
                 LOG.error(f"Invalid command. Type 'help' to see the list of available commands. {e}")
         except Exception as e:
             LOG.error(f"Unexpected error: {e}")  # 记录其他未预期的错误
-
 
 if __name__ == '__main__':
     main()  # 如果直接运行该文件，则执行main函数

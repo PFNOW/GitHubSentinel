@@ -1,60 +1,72 @@
-import os # 导入os模块用于文件和目录操作
-import requests # 导入requests库用于HTTP请求
-from bs4 import BeautifulSoup # 使用BeautifulSoup解析网页
-from datetime import datetime  # 导入日期处理模块
-from src.logger import LOG  # 导入日志模块
+import requests  # 导入requests库用于HTTP请求
+from bs4 import BeautifulSoup  # 导入BeautifulSoup库用于解析HTML内容
+from datetime import datetime  # 导入datetime模块用于获取日期和时间
+import os  # 导入os模块用于文件和目录操作
+from logger import LOG  # 导入日志模块
 
 class HackerNewsClient:
     def __init__(self):
-        pass
+        self.url = 'https://news.ycombinator.com/'  # Hacker News的URL
 
-    def fetch_hackernews_top_stories(self):
-    # 获取 Hacker News 首页的热点新闻
-        LOG.debug("准备获取Hacker News首页的热点新闻")
-        url = 'https://news.ycombinator.com/'
-        response = requests.get(url)
-        response.raise_for_status()  # 检查请求是否成功
-
+    def fetch_top_stories(self):
+        LOG.debug("准备获取Hacker News的热门新闻。")
         try:
-            soup = BeautifulSoup(response.text, 'html.parser')
-            # 查找包含新闻的所有 <tr> 标签
-            stories = soup.find_all('tr', class_='athing')
-
-            top_stories = []
-            for story in stories:
-                title_tag = story.find('span', class_='titleline').find('a')
-                if title_tag:
-                    title = title_tag.text
-                    link = title_tag['href']
-                    top_stories.append({'title': title, 'link': link})
+            response = requests.get(self.url, timeout=10)
+            response.raise_for_status()  # 检查请求是否成功
+            top_stories = self.parse_stories(response.text)  # 解析新闻数据
             return top_stories
         except Exception as e:
-            LOG.error(f"获取Hacker News首页的热点新闻失败: {e}")
+            LOG.error(f"获取Hacker News的热门新闻失败：{str(e)}")
+            return []
+
+    def parse_stories(self, html_content):
+        LOG.debug("解析Hacker News的HTML内容。")
+        soup = BeautifulSoup(html_content, 'html.parser')
+        stories = soup.find_all('tr', class_='athing')  # 查找所有包含新闻的<tr>标签
+
+        top_stories = []
+        for story in stories:
+            title_tag = story.find('span', class_='titleline').find('a')
+            if title_tag:
+                title = title_tag.text
+                link = title_tag['href']
+                top_stories.append({'title': title, 'link': link})
+
+        LOG.info(f"成功解析 {len(top_stories)} 条Hacker News新闻。")
+        return top_stories
+
+    def export_top_stories(self, date=None, hour=None):
+        LOG.debug("准备导出Hacker News的热门新闻。")
+        top_stories = self.fetch_top_stories()  # 获取新闻数据
+
+        if not top_stories:
+            LOG.warning("未找到任何Hacker News的新闻。")
             return None
 
-    def export_hackernews_stories(self):
-    # 导出 Hacker News 新闻内容
-        LOG.debug("准备导出Hacker News新闻内容:")
-        today = datetime.now().date().isoformat()  # 获取今天的日期
-        stories=self.fetch_hackernews_top_stories() # 获取Hacker News首页的热点新闻
+        # 如果未提供 date 和 hour 参数，使用当前日期和时间
+        if date is None:
+            date = datetime.now().strftime('%Y-%m-%d')
+        if hour is None:
+            hour = datetime.now().strftime('%H')
 
-        repo_dir = os.path.join('daily_progress', 'hacker_news')  # 构建目录路径
-        os.makedirs(repo_dir, exist_ok=True)  # 确保目录存在
+        # 构建存储路径
+        dir_path = os.path.join('hacker_news', date)
+        os.makedirs(dir_path, exist_ok=True)  # 确保目录存在
 
-        # 更新文件名以包含日期范围
-        date_str = f"{today}"
-        file_path = os.path.join(repo_dir, f'{date_str}.md')  # 构建文件路径
-        LOG.info(f"Hacker News 报告路径： {file_path}")  # 记录日志
-        with open(file_path, 'w', encoding='utf-8') as file:
-            file.write(f"# Daily Progress for Hacker News ({today})\n\n")
-            for id, story  in enumerate(stories, start=1):  # 写入每条新闻
-                file.write(f"{id}. {story['title']}  Link: {story['link']}\n")
+        file_path = os.path.join(dir_path, f'{hour}.md')  # 定义文件路径
+        with open(file_path, 'w') as file:
+            file.write(f"# Hacker News Top Stories ({date} {hour}:00)\n\n")
+            for idx, story in enumerate(top_stories, start=1):
+                file.write(f"{idx}. [{story['title']}]({story['link']})\n")
 
-        LOG.info(f"Hacker News 报告生成： {file_path}")  # 记录日志
+        LOG.info(f"Hacker News热门新闻文件生成：{file_path}")
         return file_path
 
+
 if __name__ == "__main__":
-    stories = HackerNewsClient().export_hackernews_stories()
+    client = HackerNewsClient()
+    stories = client.export_top_stories()  # 默认情况下使用当前日期和时间
+
     if stories:
         print(f"Stories exported to {stories}")
     else:

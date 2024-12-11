@@ -21,7 +21,11 @@
         "ollama_api_url": "http://localhost:3000/api/chat/completions",
         "ollama_api_key": ""
     },
-    "report_types": ["github", "hacker_news"],
+    "report_types": [
+        "github",
+        "hacker_news_hours_topic",
+        "hacker_news_daily_report"
+    ],
     "slack": {
         "webhook_url": "your_slack_webhook_url"
     }
