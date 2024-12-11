@@ -34,7 +34,7 @@ def hacker_news_job(hacker_news_client, report_generator, notifier):
     LOG.info("[开始执行定时任务]")
     # 导出Hacker News的最新内容
     markdown_file_path = hacker_news_client.export_hackernews_stories()
-    report, report_file_path = report_generator.generate_hacker_news_report(markdown_file_path)
+    report, report_file_path = report_generator.report_generator.generate_daily_report(markdown_file_path, "hacker_news")
     notifier.notify("hacker news", report)
     LOG.info(f"[定时任务执行完毕]")
 

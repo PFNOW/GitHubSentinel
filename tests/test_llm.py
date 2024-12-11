@@ -47,7 +47,7 @@ class TestLLM(unittest.TestCase):
         self.config.report_types = ["missing_prompt_type"]
         with self.assertRaises(FileNotFoundError):
             llm = LLM(self.config)
-        prompt_file = f"prompts/missing_prompt_type_{self.config.llm_model_type.lower()}_prompt.txt"
+        prompt_file = f"../src/prompts/missing_prompt_type_{self.config.llm_model_type.lower()}_prompt.txt"
         mock_log_error.assert_called_with(f"提示文件不存在: {prompt_file}")
 
     @patch('llm.LOG.error')
@@ -79,20 +79,21 @@ class TestLLM(unittest.TestCase):
     @patch('llm.OpenAI')
     def test_openai_exception_handling(self, mock_openai, mock_log_error):
         """
-        测试调用 OpenAI 模型时发生异常的错误处理路径。
+        测试调用 OpenAI 模型时发生异常的错误处理路径。中转key错误只会报Connection error
         """
         # 设置为使用 OpenAI 模型
         self.config.llm_model_type = "openai"
         self.llm = LLM(self.config)
         
         # 模拟 OpenAI 客户端抛出异常
-        mock_openai().chat.completions.create.side_effect = Exception("OpenAI API error")
+        mock_openai().chat.completions.create.side_effect = Exception("Connection error.")
         
         with self.assertRaises(Exception):
+            self.llm.model = "openai"
             self.llm.generate_report("github", self.github_content)
         
         # 检查是否记录了预期的错误日志
-        mock_log_error.assert_called_with("生成报告时发生错误：OpenAI API error")
+        mock_log_error.assert_called_with("生成报告时发生错误：Connection error.")
 
 
 if __name__ == '__main__':

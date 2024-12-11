@@ -32,7 +32,7 @@ class LLM:
         预加载所有可能的提示文件，并存储在字典中。
         """
         for report_type in self.config.report_types:  # 使用从配置中加载的报告类型
-            prompt_file = f"prompts/{report_type}_{self.model}_prompt.txt"
+            prompt_file = f"../src/prompts/{report_type}_{self.model}_prompt.txt"
             if not os.path.exists(prompt_file):
                 LOG.error(f"提示文件不存在: {prompt_file}")
                 raise FileNotFoundError(f"提示文件未找到: {prompt_file}")
@@ -123,7 +123,7 @@ class LLM:
             LOG.debug("Ollama response: {}", response_data)
 
             # 直接从响应数据中获取 content
-            message_content = response_data['choices'][0]['message']['content']
+            message_content = response_data.get("choices", [{}])[0].get("message", {}).get("content", None)
             if message_content:
                 return message_content  # 返回生成的报告内容
             else:
@@ -135,6 +135,7 @@ class LLM:
 
     def switch_api(self, api_name):
         self.model = api_name.lower()
+        self._preload_prompts()
 
 
 

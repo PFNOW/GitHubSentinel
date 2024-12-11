@@ -167,7 +167,7 @@ class HackerNewsCommandHandler:
         print(f"Exported hacker news stories from file: {file_path}")
 
     def generate_hacker_news_report(self, args):
-        self.report_generator.generate_hacker_news_report(args.file)
+        self.report_generator.generate_daily_report(args.file, "hacker_news")
         print(f"Generated daily report from file: {args.file}")
 
     def email_notifier(self, args):

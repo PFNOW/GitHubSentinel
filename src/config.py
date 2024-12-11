@@ -25,7 +25,7 @@ class Config:
     
     def load_config(self):
         # 尝试从环境变量获取配置或使用 config.json 文件中的配置作为回退
-        with open('config.json', 'r') as f:
+        with open('../src/config.json', 'r') as f:
             config = json.load(f)
             
             # 使用环境变量或配置文件的 GitHub Token
