@@ -20,6 +20,25 @@ class ReportGenerator:
             with open(prompt_file, "r", encoding='utf-8') as file:
                 self.prompts[report_type] = file.read()
 
+    def generate_baidu_news_report(self, directory_path):
+        """
+        生成新闻简报，并保存为 {original_filename}_report.md。
+        """
+        markdown_content = ""
+        for filename in os.listdir(directory_path):
+            if not filename.endswith("report.md"):
+                with open(os.path.join(directory_path, filename), 'r', encoding='utf-8') as file:
+                    markdown_content += file.read() + "\n"
+
+        system_prompt = self.prompts.get("baidu_news")
+        report = self.llm.generate_report(system_prompt, markdown_content)
+        report_file_path = directory_path + "/report.md"
+        with open(report_file_path, 'w+', encoding='utf-8') as report_file:
+            report_file.write(report)  # 写入生成的报告
+
+        LOG.info(f"新闻已保存到 {report_file_path}")
+        return report, report_file_path
+
     def generate_github_report(self, markdown_file_path):
         """
         生成 GitHub 项目的报告，并保存为 {original_filename}_report.md。
@@ -41,7 +60,7 @@ class ReportGenerator:
         """
         生成 Hacker News 小时主题的报告，并保存为 {original_filename}_topic.md。
         """
-        with open(markdown_file_path, 'r') as file:
+        with open(markdown_file_path, 'r', encoding='utf-8') as file:
             markdown_content = file.read()
 
         system_prompt = self.prompts.get("hacker_news_hours_topic")
@@ -98,8 +117,10 @@ if __name__ == '__main__':
     report_generator = ReportGenerator(llm, config.report_types)
 
     # hn_hours_file = "./hacker_news/2024-09-01/14.md"
-    hn_daily_dir = "./hacker_news/2024-09-01/"
+    # hn_daily_dir = "./hacker_news/2024-09-01/"
+    bn_dir= "./baidu_news/2024-12-13/"
 
     # report, report_file_path = report_generator.generate_hn_topic_report(hn_hours_file)
-    report, report_file_path = report_generator.generate_hn_daily_report(hn_daily_dir)
+    # report, report_file_path = report_generator.generate_hn_daily_report(hn_daily_dir)
+    report, report_file_path = report_generator.generate_baidu_news_report(bn_dir)
     LOG.debug(report)

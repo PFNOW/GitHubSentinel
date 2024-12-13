@@ -51,16 +51,24 @@ class HackerNewsClient:
 
         # 构建存储路径
         dir_path = os.path.join('hacker_news', date)
-        os.makedirs(dir_path, exist_ok=True)  # 确保目录存在
+        try:
+            # 确保目录存在
+            os.makedirs(dir_path, exist_ok=True)
+            LOG.debug(f"目录路径：{dir_path}")
 
-        file_path = os.path.join(dir_path, f'{hour}.md')  # 定义文件路径
-        with open(file_path, 'w') as file:
-            file.write(f"# Hacker News Top Stories ({date} {hour}:00)\n\n")
-            for idx, story in enumerate(top_stories, start=1):
-                file.write(f"{idx}. [{story['title']}]({story['link']})\n")
+            file_path = os.path.join(dir_path, f'{hour}.md')  # 定义文件路径
+            LOG.debug(f"准备写入文件：{file_path}")
 
-        LOG.info(f"Hacker News热门新闻文件生成：{file_path}")
-        return file_path
+            with open(file_path, 'w', encoding='utf-8') as file:
+                file.write(f"# Hacker News Top Stories ({date} {hour}:00)\n\n")
+                for idx, story in enumerate(top_stories, start=1):
+                    file.write(f"{idx}. [{story['title']}]({story['link']})\n")
+
+            LOG.info(f"Hacker News热门新闻文件生成：{file_path}")
+            return file_path
+        except Exception as e:
+            LOG.error(f"导出热门新闻时发生错误：{str(e)}")
+            return None
 
 
 if __name__ == "__main__":

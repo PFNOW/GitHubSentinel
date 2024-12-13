@@ -16,6 +16,7 @@ class Config:
         self.update_interval = None
         self.subscriptions_file = None
         self.notification_settings = None
+        self.baidu_news_type = None
         self.openai_token=os.getenv("OPENAI_TOKEN")
         self.github_token = os.getenv("GITHUB_TOKEN")
         self.openai_url=os.getenv("OPENAI_URL")
@@ -57,6 +58,9 @@ class Config:
 
             # 加载报告类型配置
             self.report_types = config.get('report_types', ["github", "hacker_news"])  # 默认报告类型
+
+            # 加载百度新闻配置
+            self.baidu_news_type = config.get('baidu_news_type', ['all'])  # 默认百度新闻类型
 
             # 加载 Slack 配置
             slack_config = config.get('slack', {})

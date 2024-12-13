@@ -76,6 +76,12 @@ GitHub Sentinel 不仅能帮助用户自动跟踪和分析 `GitHub 开源项目`
 **Hacker News 热门技术话题挖掘**
 ![gradio_v0.8_hn](images/gradio_v0.8_hn.png)
 
+**GitHub 项目订阅管理**
+![gradio_v1.0_subscription_manager](images/gradio_v1.0_subscription_manager.png)
+
+**百度新闻**
+![gradio_v1.0_bn](images/gradio_v1.0_bn.png)
+
 
 ## 快速开始
 

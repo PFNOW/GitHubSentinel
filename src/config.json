@@ -8,12 +8,12 @@
     "email":  {
         "smtp_server": "smtp.exmail.qq.com",
         "smtp_port": 465,
-        "from": "pjt@zaijidata.com",
+        "from": "",
         "password": "",
-        "to": "test@zaijidata.com"
+        "to": ""
     },
     "llm": {
-        "model_type": "ollama",
+        "model_type": "openai",
         "openai_token": "",
         "openai_url": "",
         "openai_model_name": "gpt-4o-mini",
@@ -24,8 +24,10 @@
     "report_types": [
         "github",
         "hacker_news_hours_topic",
-        "hacker_news_daily_report"
+        "hacker_news_daily_report",
+        "baidu_news"
     ],
+    "baidu_news_type": ["all", "hot_news", "latest_news"],
     "slack": {
         "webhook_url": "your_slack_webhook_url"
     }

@@ -1,0 +1,10 @@
+# hot_news-(2024-12-13 16-46-52)
+
+1. [明年经济工作如何布局？这场重要会议值得关注]( https://content-static.cctvnews.cctv.com/snow-book/index.html?item_id=12910584256291684808&toc_style_id=feeds_default&track_id=AD859DF6-FA72-4CD8-8D80-54512643F146_755759424443&share_to=wechat)
+2. [明年中国经济怎么干？中央经济工作会议要点梳理](https://content-static.cctvnews.cctv.com/snow-book/index.html?item_id=9081220794710615519&t=1734021243293&toc_style_id=feeds_default&track_id=C2C826BB-6EB9-4930-8EB1-7C937A664F58_755737962588&share_to=copy_url)
+3. [增强信心、迎难而上、奋发有为](https://h.xinhuaxmt.com/vh512/share/12318268?newstype=1001&homeshow=1)
+4. [一习话｜“以史为鉴、面向未来，共同珍爱和平、维护和平”](https://news.cnr.cn/dj/sz/20241212/t20241212_527007011.shtml)
+5. [定调2025！一图速览中央经济工作会议要点](https://www.peopleapp.com/column/30047683894-500005989062)
+6. [一图读懂中央经济工作会议](https://content-static.cctvnews.cctv.com/snow-book/index.html?item_id=7622017477905585097&toc_style_id=feeds_default&track_id=78534705-B887-4026-B2EA-2FD5D8E2DC45_755737916797&share_to=copy_url)
+7. [得了哮喘不能运动……是真是假？｜谣言终结站](https://mp.weixin.qq.com/s/EbhaSMRXt5m--Zihh3iS8g)
+8. [人民网评：铭记历史，让和平的阳光照亮世界](https://app.people.cn/h5/detail/normal/6099719223378944)

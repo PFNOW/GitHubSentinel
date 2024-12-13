@@ -41,7 +41,7 @@ class LLM:
             return self._generate_report_openai(messages)
         elif self.model == "ollama":
             self.api_url = self.config.ollama_api_url  # 设置Ollama API的URL
-            return self._generate_report_ollama(messages,)
+            return self._generate_report_ollama(messages)
         else:
             raise ValueError(f"不支持的模型类型: {self.model}")
 

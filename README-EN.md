@@ -70,6 +70,13 @@ GitHub Sentinel not only helps users automatically track and analyze the progres
 
 ![gradio_v0.8_hn](images/gradio_v0.8_hn.png)
 
+**GitHub 项目订阅管理**
+![gradio_v1.0_subscription_manager](images/gradio_v1.0_subscription_manager.png)
+
+**百度新闻**
+![gradio_v1.0_bn](images/gradio_v1.0_bn.png)
+
+
 ## Quick Start
 
 ### 1. Install Dependencies
