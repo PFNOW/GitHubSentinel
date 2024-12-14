@@ -14,13 +14,6 @@ class LLM:
         self.model = config.llm_model_type.lower()  # 获取模型类型并转换为小写
         self.prompts = {}  # 存储所有预加载的提示信息
         self.client = None
-        if self.model == "openai":
-            self.client = OpenAI(base_url=self.config.openai_url, api_key=self.config.openai_token)  # 创建OpenAI客户端实例
-        elif self.model == "ollama":
-            self.api_url = self.config.ollama_api_url  # 设置Ollama API的URL
-        else:
-            LOG.error(f"不支持的模型类型: {self.model}")
-            raise ValueError(f"不支持的模型类型: {self.model}")  # 如果模型类型不支持，抛出错误
 
     def generate_report(self, system_prompt, user_content):
         """

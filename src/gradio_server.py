@@ -203,7 +203,7 @@ app = gr.mount_gradio_app(app, report_generator_app, path="/report_generator_app
 
 if __name__ == "__main__":
     # 启动FastAPI服务
-    uvicorn.run(app, port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 
     # gradio启动方式
     # demo.launch()

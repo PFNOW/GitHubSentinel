@@ -9,6 +9,5 @@ if grep -q "FAILED" test_results.txt; then
     exit 1
 else
     echo "All tests passed!"
-    sleep 2
     exit 0
 fi

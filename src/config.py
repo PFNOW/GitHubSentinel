@@ -26,7 +26,13 @@ class Config:
     
     def load_config(self):
         # 尝试从环境变量获取配置或使用 config.json 文件中的配置作为回退
-        with open('../src/config.json', 'r') as f:
+        file_path = "config.json"
+        if os.path.exists("./config.json"):
+            file_path = "./config.json"
+        elif os.path.exists(os.path.join(os.path.dirname(__file__), "config.json")):
+            file_path = os.path.join(os.path.dirname(__file__), "config.json")
+        print(file_path)
+        with open(file_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
             
             # 使用环境变量或配置文件的 GitHub Token
