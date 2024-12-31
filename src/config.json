@@ -28,6 +28,7 @@
         "baidu_news"
     ],
     "baidu_news_type": ["all", "hot_news", "latest_news"],
+    "wos_api_key": "",
     "slack": {
         "webhook_url": "your_slack_webhook_url"
     }

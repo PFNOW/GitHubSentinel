@@ -20,6 +20,7 @@ class Config:
         self.openai_token=os.getenv("OPENAI_TOKEN")
         self.github_token = os.getenv("GITHUB_TOKEN")
         self.openai_url=os.getenv("OPENAI_URL")
+        self.wos_api_key=os.getenv("WOS_API_KEY")
 
         # 加载配置
         self.load_config()
@@ -61,6 +62,9 @@ class Config:
 
             # 加载百度新闻配置
             self.baidu_news_type = config.get('baidu_news_type', ['all'])  # 默认百度新闻类型
+
+            # 加载wos配置
+            self.wos_api_key = os.getenv("WOS_API_KEY", config.get('wos_api_key'))
 
             # 加载 Slack 配置
             slack_config = config.get('slack', {})

@@ -68,6 +68,9 @@ GitHub Sentinel 是专为大模型（LLMs）时代打造的智能信息检索和
 GitHub Sentinel 不仅能帮助用户自动跟踪和分析 `GitHub 开源项目` 的最新动态，还能快速扩展到其他信息渠道，如 `Hacker News` 的热门话题，提供更全面的信息挖掘与分析能力。
 
 ### 产品截图
+**web of science**
+
+![web_of_science](images/web of science.jpeg)
 
 **GitHub 项目进度跟踪与总结**
 
